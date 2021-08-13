@@ -1,6 +1,21 @@
-import { default as React } from "react";
+import { default as React, useEffect, useState } from "react";
 
 function App() {
+  const [open, setOpen] = useState(0)
+  const getPrice = () => {
+    fetch('https://dev.ebitlabs.io/api/v1/fx/ETHUSD/ohlc')
+      .then(r => r.json())
+      .then(r => {
+        if (open !== r.open) {
+          setOpen(r.open)
+        }
+        setTimeout(getPrice, 5000)
+      })
+  }
+  useEffect(getPrice, [])
+
+
+
   return (
     <div className="pt-12 bg-gray-50 sm:pt-16">
       <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -21,7 +36,7 @@ function App() {
                     ETH/USD
                   </dt>
                   <dd className="order-1 text-5xl font-extrabold text-gray-500">
-                    $1919<span className="text-2xl">.17</span>
+                    ${open}
                   </dd>
                 </div>
               </dl>
